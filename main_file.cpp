@@ -73,7 +73,7 @@ void drawScene(GLFWwindow* window) {
 
 	glm::mat4 M = glm::mat4(1.0f);
 
-	glUniform4f(sp->u("color"), 0.2f, 0.3f, 0.7f, 0);
+	glUniform4f(sp->u("color"), 0.2f, 0.3f, 0.71f, 0);
 	Models::teapot.drawSolid();
 	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
 

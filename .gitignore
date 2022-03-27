@@ -5,7 +5,8 @@
 
 # Custom
 
-.vs
+.vs/*
+Debug/*
 
 # User-specific files
 *.rsuser
