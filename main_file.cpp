@@ -50,17 +50,17 @@ struct key_status {
     int scrollY = 0;
 } pressed_keys;
 
-float speed_x=0;
-float speed_y=0;
-float aspectRatio=1;
+float speed_x = 0;
+float speed_y = 0;
+float aspectRatio = 1;
 
 glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 0.0f, -50.0f),
-                          glm::vec3(0.0f, 0.0f, 0.0f),
-                          glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
+    glm::vec3(0.0f, 0.0f, 0.0f),
+    glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
 
-glm::mat4 P=glm::perspective(50.0f*PI/180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
+glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.001f, 200.0f); //Wylicz macierz rzutowania
 
-glm::mat4 M=glm::mat4(1.0f);
+glm::mat4 M = glm::mat4(1.0f);
 
 MeshModel spooky;
 
@@ -87,23 +87,23 @@ custom_camera camera;
 
 //Procedura obsługi błędów
 void error_callback(int error, const char* description) {
-	fputs(description, stderr);
+    fputs(description, stderr);
 }
 
-void keyCallback(GLFWwindow* window,int key,int scancode,int action,int mods) {
-    if (action==GLFW_PRESS) {
-        if (key==GLFW_KEY_LEFT) pressed_keys.arrow_left = true;
-        if (key==GLFW_KEY_RIGHT) pressed_keys.arrow_right = true;
-        if (key==GLFW_KEY_UP) pressed_keys.arrow_up = true;
-        if (key==GLFW_KEY_DOWN) pressed_keys.arrow_down = true;
-        if (key==GLFW_KEY_EQUAL || 
-            key==GLFW_KEY_KP_ADD) pressed_keys.plus = true;
-        if (key==GLFW_KEY_MINUS ||
-            key==GLFW_KEY_KP_SUBTRACT) pressed_keys.minus = true;
-        if (key==GLFW_KEY_RIGHT_SHIFT ||
+void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    if (action == GLFW_PRESS) {
+        if (key == GLFW_KEY_LEFT) pressed_keys.arrow_left = true;
+        if (key == GLFW_KEY_RIGHT) pressed_keys.arrow_right = true;
+        if (key == GLFW_KEY_UP) pressed_keys.arrow_up = true;
+        if (key == GLFW_KEY_DOWN) pressed_keys.arrow_down = true;
+        if (key == GLFW_KEY_EQUAL ||
+            key == GLFW_KEY_KP_ADD) pressed_keys.plus = true;
+        if (key == GLFW_KEY_MINUS ||
+            key == GLFW_KEY_KP_SUBTRACT) pressed_keys.minus = true;
+        if (key == GLFW_KEY_RIGHT_SHIFT ||
             key == GLFW_KEY_LEFT_SHIFT) pressed_keys.shift = true;
     }
-    if (action==GLFW_RELEASE) {
+    if (action == GLFW_RELEASE) {
         if (key == GLFW_KEY_LEFT) pressed_keys.arrow_left = false;
         if (key == GLFW_KEY_RIGHT) pressed_keys.arrow_right = false;
         if (key == GLFW_KEY_UP) pressed_keys.arrow_up = false;
@@ -123,10 +123,10 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
     pressed_keys.scrollY = yoffset;
 }
 
-void windowResizeCallback(GLFWwindow* window,int width,int height) {
-    if (height==0) return;
-    aspectRatio=(float)width/(float)height;
-    glViewport(0,0,width,height);
+void windowResizeCallback(GLFWwindow* window, int width, int height) {
+    if (height == 0) return;
+    aspectRatio = (float)width / (float)height;
+    glViewport(0, 0, width, height);
 }
 
 void handle_controls(double time) {
@@ -163,11 +163,11 @@ void handle_controls(double time) {
 
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
-	//************Tutaj umieszczaj kod, który należy wykonać raz, na początku programu************
-	glClearColor(0,0,0,1);
-	glEnable(GL_DEPTH_TEST);
-	glfwSetWindowSizeCallback(window,windowResizeCallback);
-	glfwSetKeyCallback(window,keyCallback);
+    //************Tutaj umieszczaj kod, który należy wykonać raz, na początku programu************
+    glClearColor(0, 0, 0, 1);
+    glEnable(GL_DEPTH_TEST);
+    glfwSetWindowSizeCallback(window, windowResizeCallback);
+    glfwSetKeyCallback(window, keyCallback);
     glfwSetScrollCallback(window, scroll_callback);
 
     camera = custom_camera();
@@ -184,59 +184,59 @@ void freeOpenGLProgram(GLFWwindow* window) {
 
 //Procedura rysująca zawartość sceny
 void drawScene(GLFWwindow* window) {
-	//************Tutaj umieszczaj kod rysujący obraz******************l
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //************Tutaj umieszczaj kod rysujący obraz******************l
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     V = camera.getViewMatrix(); //Wylicz macierz widoku
     //camera.debug();
-    spooky.drawModel(V, P, M);
+    spooky.drawModel(V, P, M, camera.position);
     glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
 
 int main(void)
 {
-	GLFWwindow* window; //Wskaźnik na obiekt reprezentujący okno
+    GLFWwindow* window; //Wskaźnik na obiekt reprezentujący okno
 
-	glfwSetErrorCallback(error_callback);//Zarejestruj procedurę obsługi błędów
+    glfwSetErrorCallback(error_callback);//Zarejestruj procedurę obsługi błędów
 
-	if (!glfwInit()) { //Zainicjuj bibliotekę GLFW
-		fprintf(stderr, "Nie można zainicjować GLFW.\n");
-		exit(EXIT_FAILURE);
-	}
+    if (!glfwInit()) { //Zainicjuj bibliotekę GLFW
+        fprintf(stderr, "Nie można zainicjować GLFW.\n");
+        exit(EXIT_FAILURE);
+    }
 
-	window = glfwCreateWindow(500, 500, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
+    window = glfwCreateWindow(500, 500, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
 
-	if (!window) //Jeżeli okna nie udało się utworzyć, to zamknij program
-	{
-		fprintf(stderr, "Nie można utworzyć okna.\n");
-		glfwTerminate();
-		exit(EXIT_FAILURE);
-	}
+    if (!window) //Jeżeli okna nie udało się utworzyć, to zamknij program
+    {
+        fprintf(stderr, "Nie można utworzyć okna.\n");
+        glfwTerminate();
+        exit(EXIT_FAILURE);
+    }
 
-	glfwMakeContextCurrent(window); //Od tego momentu kontekst okna staje się aktywny i polecenia OpenGL będą dotyczyć właśnie jego.
-	glfwSwapInterval(1); //Czekaj na 1 powrót plamki przed pokazaniem ukrytego bufora
+    glfwMakeContextCurrent(window); //Od tego momentu kontekst okna staje się aktywny i polecenia OpenGL będą dotyczyć właśnie jego.
+    glfwSwapInterval(1); //Czekaj na 1 powrót plamki przed pokazaniem ukrytego bufora
 
-	if (glewInit() != GLEW_OK) { //Zainicjuj bibliotekę GLEW
-		fprintf(stderr, "Nie można zainicjować GLEW.\n");
-		exit(EXIT_FAILURE);
-	}
+    if (glewInit() != GLEW_OK) { //Zainicjuj bibliotekę GLEW
+        fprintf(stderr, "Nie można zainicjować GLEW.\n");
+        exit(EXIT_FAILURE);
+    }
 
-	initOpenGLProgram(window); //Operacje inicjujące
+    initOpenGLProgram(window); //Operacje inicjujące
 
-	//Główna pętla
-	glfwSetTime(0); //Zeruj timer
-	while (!glfwWindowShouldClose(window)) //Tak długo jak okno nie powinno zostać zamknięte
-	{
+    //Główna pętla
+    glfwSetTime(0); //Zeruj timer
+    while (!glfwWindowShouldClose(window)) //Tak długo jak okno nie powinno zostać zamknięte
+    {
 
         handle_controls(glfwGetTime());
 
         glfwSetTime(0); //Zeruj timer
-		drawScene(window); //Wykonaj procedurę rysującą
-		glfwPollEvents(); //Wykonaj procedury callback w zalezności od zdarzeń jakie zaszły.
-	}
+        drawScene(window); //Wykonaj procedurę rysującą
+        glfwPollEvents(); //Wykonaj procedury callback w zalezności od zdarzeń jakie zaszły.
+    }
 
-	freeOpenGLProgram(window);
+    freeOpenGLProgram(window);
 
-	glfwDestroyWindow(window); //Usuń kontekst OpenGL i okno
-	glfwTerminate(); //Zwolnij zasoby zajęte przez GLFW
-	exit(EXIT_SUCCESS);
+    glfwDestroyWindow(window); //Usuń kontekst OpenGL i okno
+    glfwTerminate(); //Zwolnij zasoby zajęte przez GLFW
+    exit(EXIT_SUCCESS);
 }

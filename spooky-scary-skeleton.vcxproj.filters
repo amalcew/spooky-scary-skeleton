@@ -45,6 +45,9 @@
     <ClInclude Include="custom_camera.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="meshmodel.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cube.cpp">
@@ -74,6 +77,9 @@
     <ClCompile Include="custom_camera.cpp">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="meshmodel.cpp">
+      <Filter>Pliki źródłowe</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="f_constant.glsl">
@@ -86,6 +92,12 @@
       <Filter>Pliki zasobów</Filter>
     </None>
     <None Include="v_lambert.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="f_simplest.glsl">
+      <Filter>Pliki zasobów</Filter>
+    </None>
+    <None Include="v_simplest.glsl">
       <Filter>Pliki zasobów</Filter>
     </None>
   </ItemGroup>
