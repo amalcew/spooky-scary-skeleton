@@ -1,0 +1,2 @@
+C:/Users/pmarc/Documents/Studia/_Semestr IV/_Grafika/spooky-scary-skeleton/glm/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+C:/Users/pmarc/Documents/Studia/_Semestr IV/_Grafika/spooky-scary-skeleton/glm/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir

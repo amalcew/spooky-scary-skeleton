@@ -1,0 +1,3 @@
+rm -f main_file
+make
+./main_file
