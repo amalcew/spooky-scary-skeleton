@@ -117,23 +117,16 @@ GLuint readTexture(const char* filename) {
 }
 
 
-void loadModel(std::string plik) {
+void initSingleMesh(const aiMesh* singleMesh) {
     using namespace std;
 
-    Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(plik, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
-    cout << importer.GetErrorString() << endl;
+    for (int i = 0; i < singleMesh->mNumVertices; i++) {
+        aiVector3D vertex = singleMesh->mVertices[i];  //aiVector3D podobny do glm::vec3
+        aiVector3D normal = singleMesh->mNormals[i];  //Wektory znormalizowane
+        aiVector3D texCoord = singleMesh->mTextureCoords[0][i];
 
-    aiMesh* mesh = scene->mMeshes[0];
-
-    for (int i = 0; i < mesh->mNumVertices; i++) {
-        aiVector3D vertex = mesh->mVertices[i];  //aiVector3D podobny do glm::vec3
         verts.push_back(glm::vec4(vertex.x, vertex.y, vertex.z, 1));
-
-        aiVector3D normal = mesh->mNormals[i];  //Wektory znormalizowane
         norms.push_back(glm::vec4(normal.x, normal.y, normal.z, 0));
-
-        aiVector3D texCoord = mesh->mTextureCoords[0][i];
         texCoords.push_back(glm::vec2(texCoord.x, texCoord.y));
 
         //unsigned int liczba_zest = mesh->GetNumUVChannels();
@@ -144,14 +137,37 @@ void loadModel(std::string plik) {
         //cout << texCoord.x << " " << texCoord.y << endl;
     }
 
-    for (int i = 0; i < mesh->mNumFaces; i++) {
-        aiFace& face = mesh->mFaces[i];
+    for (int i = 0; i < singleMesh->mNumFaces; i++) {
+        aiFace& face = singleMesh->mFaces[i];
 
         for (int j = 0; j < face.mNumIndices; j++) {
             indices.push_back(face.mIndices[j]);
-
         }
     }
+}
+
+
+void initMeshes(const aiScene* scene) {
+    using namespace std;
+
+    // if (scene->HasMeshes()) {
+        int meshNum = scene->mNumMeshes;
+    // }
+
+    for (int i = 0; i < meshNum; i++) {
+        aiMesh* mesh = scene->mMeshes[i];
+        initSingleMesh(mesh);
+    }
+}
+
+
+void loadModel(std::string plik) {
+    using namespace std;
+
+    Assimp::Importer importer;
+    const aiScene* scene = importer.ReadFile(plik, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
+    cout << importer.GetErrorString() << endl;
+    initMeshes(scene);
 }
 
 
@@ -167,7 +183,7 @@ void initOpenGLProgram(GLFWwindow* window) {
 	tex0 = readTexture("content/metal.png");
 	tex1 = readTexture("content/sky.png");
 
-    loadModel(std::string("content/monkey.fbx"));
+    loadModel(std::string("content/skeleton-model.fbx"));
 }
 
 
@@ -186,7 +202,7 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
 	//************Tutaj umieszczaj kod rysujący obraz******************l
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 0.0f, -5.0f),
+    glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 0.0f, -50.0f),
                               glm::vec3(0.0f, 0.0f, 0.0f),
                               glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
 
@@ -205,7 +221,6 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
     glEnableVertexAttribArray(sp->a("vertex"));  //Włącz przesyłanie danych do atrybutu vertex
     glVertexAttribPointer(sp->a("vertex"),4,GL_FLOAT,false,0,verts.data()); //Wskaż tablicę z danymi dla atrybutu vertex
 
-    // cos tu nie trybi, fajnie byłoby przy okazji ogarnąć dlaczego
 	//glEnableVertexAttribArray(sp->a("color"));  //Włącz przesyłanie danych do atrybutu color
 	//glVertexAttribPointer(sp->a("color"), 4, GL_FLOAT, false, 0, colors.data()); //Wskaż tablicę z danymi dla atrybutu color
 
