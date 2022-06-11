@@ -147,11 +147,11 @@ void initSingleMesh(const aiMesh* singleMesh) {
 }
 
 
-void initMeshes(const aiScene* scene) {
+void initAllMeshes(const aiScene* scene) {
     using namespace std;
 
     // if (scene->HasMeshes()) {
-        int meshNum = scene->mNumMeshes;
+    int meshNum = scene->mNumMeshes;
     // }
 
     for (int i = 0; i < meshNum; i++) {
@@ -161,13 +161,16 @@ void initMeshes(const aiScene* scene) {
 }
 
 
-void loadModel(std::string plik) {
+void loadModel(std::string path) {
     using namespace std;
 
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(plik, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
-    cout << importer.GetErrorString() << endl;
-    initMeshes(scene);
+    const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
+    if (scene) {
+        initAllMeshes(scene);
+    } else {
+        printf("Error parsing '%s': '%s'\n", path.c_str(), importer.GetErrorString());
+    }
 }
 
 
