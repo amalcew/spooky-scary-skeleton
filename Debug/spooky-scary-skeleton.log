@@ -1,5 +1,0 @@
-﻿  meshmodel.cpp
-C:\Users\pmarc\Documents\Studia\_Semestr IV\_Grafika\spooky-scary-skeleton\meshmodel.cpp(81,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\pmarc\Documents\Studia\_Semestr IV\_Grafika\spooky-scary-skeleton\meshmodel.cpp(98,23): warning C4018: '<': signed/unsigned mismatch
-C:\Users\pmarc\Documents\Studia\_Semestr IV\_Grafika\spooky-scary-skeleton\meshmodel.cpp(101,27): warning C4018: '<': signed/unsigned mismatch
-  spooky-scary-skeleton.vcxproj -> C:\Users\pmarc\Documents\Studia\_Semestr IV\_Grafika\spooky-scary-skeleton\Debug\spooky-scary-skeleton.exe

@@ -1,5 +1,5 @@
 .idea/
-/.vs
-.vs/*
-Debug/*
-/Debug
+.vs/
+Debug/
+
+main_file
