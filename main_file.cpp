@@ -36,6 +36,20 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "lodepng.h"
 #include "shaderprogram.h"
 
+#include "custom_camera.h"
+
+struct key_status {
+    bool arrow_left = false;
+    bool arrow_right = false;
+    bool arrow_up = false;
+    bool arrow_down = false;
+    bool shift = false;
+    bool plus = false;
+    bool minus = false;
+    int scrollX = 0;
+    int scrollY = 0;
+} pressed_keys;
+
 float speed_x=0;
 float speed_y=0;
 float aspectRatio=1;
@@ -65,25 +79,46 @@ std::vector<glm::vec4> norms;
 std::vector<glm::vec2> texCoords;
 std::vector<unsigned int> indices;
 
+custom_camera camera;
+
+// =======================                                   CALLBACKI / OBSŁUGA INPUTU  <===
+
 //Procedura obsługi błędów
 void error_callback(int error, const char* description) {
 	fputs(description, stderr);
 }
 
-
 void keyCallback(GLFWwindow* window,int key,int scancode,int action,int mods) {
     if (action==GLFW_PRESS) {
-        if (key==GLFW_KEY_LEFT) speed_x=-PI;
-        if (key==GLFW_KEY_RIGHT) speed_x=PI;
-        if (key==GLFW_KEY_UP) speed_y=PI;
-        if (key==GLFW_KEY_DOWN) speed_y=-PI;
+        if (key==GLFW_KEY_LEFT) pressed_keys.arrow_left = true;
+        if (key==GLFW_KEY_RIGHT) pressed_keys.arrow_right = true;
+        if (key==GLFW_KEY_UP) pressed_keys.arrow_up = true;
+        if (key==GLFW_KEY_DOWN) pressed_keys.arrow_down = true;
+        if (key==GLFW_KEY_EQUAL || 
+            key==GLFW_KEY_KP_ADD) pressed_keys.plus = true;
+        if (key==GLFW_KEY_MINUS ||
+            key==GLFW_KEY_KP_SUBTRACT) pressed_keys.minus = true;
+        if (key==GLFW_KEY_RIGHT_SHIFT ||
+            key == GLFW_KEY_LEFT_SHIFT) pressed_keys.shift = true;
     }
     if (action==GLFW_RELEASE) {
-        if (key==GLFW_KEY_LEFT) speed_x=0;
-        if (key==GLFW_KEY_RIGHT) speed_x=0;
-        if (key==GLFW_KEY_UP) speed_y=0;
-        if (key==GLFW_KEY_DOWN) speed_y=0;
+        if (key == GLFW_KEY_LEFT) pressed_keys.arrow_left = false;
+        if (key == GLFW_KEY_RIGHT) pressed_keys.arrow_right = false;
+        if (key == GLFW_KEY_UP) pressed_keys.arrow_up = false;
+        if (key == GLFW_KEY_DOWN) pressed_keys.arrow_down = false;
+        if (key == GLFW_KEY_EQUAL ||
+            key == GLFW_KEY_KP_ADD) pressed_keys.plus = false;
+        if (key == GLFW_KEY_MINUS ||
+            key == GLFW_KEY_KP_SUBTRACT) pressed_keys.minus = false;
+        if (key == GLFW_KEY_RIGHT_SHIFT ||
+            key == GLFW_KEY_LEFT_SHIFT) pressed_keys.shift = false;
     }
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+    pressed_keys.scrollX = xoffset;
+    pressed_keys.scrollY = yoffset;
 }
 
 void windowResizeCallback(GLFWwindow* window,int width,int height) {
@@ -92,6 +127,35 @@ void windowResizeCallback(GLFWwindow* window,int width,int height) {
     glViewport(0,0,width,height);
 }
 
+void handle_controls(double time) {
+    double mulTime = time;
+    double multiplier = 2.0;
+    if (pressed_keys.shift) mulTime *= multiplier;
+    else multiplier = 1.0;
+
+    if (pressed_keys.arrow_left) camera.moveX(-mulTime);
+    else if (pressed_keys.arrow_right) camera.moveX(mulTime);
+
+    if (pressed_keys.arrow_up) camera.moveY(-mulTime);
+    else if (pressed_keys.arrow_down) camera.moveY(mulTime);
+
+    if (pressed_keys.scrollY > 0) camera.moveR(-mulTime);
+    else if (pressed_keys.scrollY < 0) camera.moveR(mulTime);
+
+    if (pressed_keys.scrollY == 0) {
+        // częstsze callbacki z klawiszy niż ze scrolla
+        // trzeba spowolnić
+        mulTime = (time / 2) * multiplier;
+        if (pressed_keys.plus) camera.moveR(-mulTime);
+        else if (pressed_keys.minus) camera.moveR(mulTime);
+    }
+
+    // reset scroll
+    pressed_keys.scrollX = 0;
+    pressed_keys.scrollY = 0;
+}
+
+// =======================                                     ŁADOWANIE MODELI/TEKSTUR  <===
 
 GLuint readTexture(const char* filename) {
     GLuint tex;
@@ -154,6 +218,7 @@ void loadModel(std::string plik) {
     }
 }
 
+// =======================                                             OPENGL INIT/FREE  <===
 
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
@@ -162,6 +227,9 @@ void initOpenGLProgram(GLFWwindow* window) {
 	glEnable(GL_DEPTH_TEST);
 	glfwSetWindowSizeCallback(window,windowResizeCallback);
 	glfwSetKeyCallback(window,keyCallback);
+    glfwSetScrollCallback(window, scroll_callback);
+
+    camera = custom_camera();
 
 	sp=new ShaderProgram("v_simplest.glsl",NULL,"f_simplest.glsl");
 	tex0 = readTexture("content/metal.png");
@@ -182,19 +250,16 @@ void freeOpenGLProgram(GLFWwindow* window) {
 
 
 //Procedura rysująca zawartość sceny
-void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
+void drawScene(GLFWwindow* window) {
 	//************Tutaj umieszczaj kod rysujący obraz******************l
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 0.0f, -5.0f),
-                              glm::vec3(0.0f, 0.0f, 0.0f),
-                              glm::vec3(0.0f, 1.0f, 0.0f)); //Wylicz macierz widoku
+    glm::mat4 V = camera.getViewMatrix(); //Wylicz macierz widoku
+    //camera.debug();
 
     glm::mat4 P=glm::perspective(50.0f*PI/180.0f, aspectRatio, 0.01f, 50.0f); //Wylicz macierz rzutowania
 
     glm::mat4 M=glm::mat4(1.0f);
-	M=glm::rotate(M,angle_y,glm::vec3(1.0f,0.0f,0.0f)); //Wylicz macierz modelu
-	M=glm::rotate(M,angle_x,glm::vec3(0.0f,1.0f,0.0f)); //Wylicz macierz modelu
 
     sp->use();//Aktywacja programu cieniującego
     //Przeslij parametry programu cieniującego do karty graficznej
@@ -226,6 +291,8 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
     // glDrawArrays(GL_TRIANGLES,0,vertexCount); //Narysuj obiekt
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
 
+    
+
     glDisableVertexAttribArray(sp->a("vertex"));  //Wyłącz przesyłanie danych do atrybutu vertex
 	glDisableVertexAttribArray(sp->a("color"));  //Wyłącz przesyłanie danych do atrybutu color
 	glDisableVertexAttribArray(sp->a("normal"));  //Wyłącz przesyłanie danych do atrybutu normal
@@ -234,6 +301,8 @@ void drawScene(GLFWwindow* window,float angle_x,float angle_y) {
     glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
 
+
+// =======================                                                           MAIN  <===
 
 int main(void)
 {
@@ -266,15 +335,14 @@ int main(void)
 	initOpenGLProgram(window); //Operacje inicjujące
 
 	//Główna pętla
-	float angle_x=0; //Aktualny kąt obrotu obiektu
-	float angle_y=0; //Aktualny kąt obrotu obiektu
 	glfwSetTime(0); //Zeruj timer
 	while (!glfwWindowShouldClose(window)) //Tak długo jak okno nie powinno zostać zamknięte
 	{
-        angle_x+=speed_x*glfwGetTime(); //Zwiększ/zmniejsz kąt obrotu na podstawie prędkości i czasu jaki upłynał od poprzedniej klatki
-        angle_y+=speed_y*glfwGetTime(); //Zwiększ/zmniejsz kąt obrotu na podstawie prędkości i czasu jaki upłynał od poprzedniej klatki
+
+        handle_controls(glfwGetTime());
+
         glfwSetTime(0); //Zeruj timer
-		drawScene(window,angle_x,angle_y); //Wykonaj procedurę rysującą
+		drawScene(window); //Wykonaj procedurę rysującą
 		glfwPollEvents(); //Wykonaj procedury callback w zalezności od zdarzeń jakie zaszły.
 	}
 

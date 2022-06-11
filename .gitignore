@@ -1,3 +1,5 @@
 .idea/
 /.vs
 .vs/*
+Debug/*
+/Debug
