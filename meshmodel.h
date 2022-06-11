@@ -44,4 +44,8 @@ private:
     std::vector<unsigned int> indices;
 };
 
+class meshmodel
+{
+};
+
 #endif //SPOOKY_SCARY_SKELETON_MESHMODEL_H
