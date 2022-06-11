@@ -1,5 +1,4 @@
-#ifndef SPOOKY_SCARY_SKELETON_MESHMODEL_H
-#define SPOOKY_SCARY_SKELETON_MESHMODEL_H
+#pragma once
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -16,26 +15,19 @@
 #include "constants.h"
 #include "lodepng.h"
 #include "shaderprogram.h"
-#include "mesh.h"
 
-
-class MeshModel {
+class Mesh
+{
 public:
-    // MeshModel();
+    Mesh(const aiMesh* singleMesh);
     //~MeshModel();
-    GLuint readTexture(const char* filename);
-    void drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam);
-    void loadModel(std::string path);
+    void setTexture(GLuint tex0, GLuint tex1);
     void setShaderProgram(ShaderProgram* sp);
-    std::vector<Mesh> meshes;
-protected:
-    // void initFromScene(const aiScene* scene, std::string path)
-    //void initSingleMesh(const aiMesh* singleMesh);
-    //void initAllMeshes(const aiScene* scene);
+    void drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam);
+private:
     void freeMemory();
 
     int meshNum;
-
     ShaderProgram* sp;
 
     GLuint tex0;
@@ -47,4 +39,3 @@ protected:
     std::vector<unsigned int> indices;
 };
 
-#endif //SPOOKY_SCARY_SKELETON_MESHMODEL_H

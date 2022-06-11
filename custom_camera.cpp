@@ -1,7 +1,7 @@
 #include "custom_camera.h"
 
 // ustawianie pozycji kamery
-void custom_camera::set_position(glm::vec3 start) {
+void custom_camera::set_position(glm::vec3 start, glm::vec3 offset) {
 	position = start;
 	lookingAt = glm::vec3(0.0, 0.0, 0.0);
 	up = glm::vec3(0.0, 1.0, 0.0);
@@ -10,6 +10,7 @@ void custom_camera::set_position(glm::vec3 start) {
 	speedX = allspeed;
 	speedY = allspeed;
 	speedR = allspeed/2;
+	this->offset = offset;
 
 	minR = 1;
 	maxR = 10000000;
@@ -36,17 +37,17 @@ void custom_camera::set_position(glm::vec3 start) {
 }
 
 custom_camera::custom_camera() {
-	set_position(glm::vec3(0.0, 0.0, -10.0));
+	set_position(glm::vec3(0.0, 0.0, 10.0), glm::vec3(0.0, 0.0, 0.0));
 }
 
-custom_camera::custom_camera(glm::vec3 start) {
-	set_position(start);
+custom_camera::custom_camera(glm::vec3 start, glm::vec3 offset) {
+	set_position(start, offset);
 }
 
 // zwróæ macierz V
 glm::mat4 custom_camera::getViewMatrix()
 {
-	return glm::lookAt(position, lookingAt, up);
+	return glm::lookAt(position + offset, lookingAt + offset, up);
 }
 
 // zmieñ odleg³oœæ od punktu który patrzysz

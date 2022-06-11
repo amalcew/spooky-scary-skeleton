@@ -24,7 +24,9 @@
     <ClInclude Include="cube.h" />
     <ClInclude Include="custom_camera.h" />
     <ClInclude Include="lodepng.h" />
+    <ClInclude Include="mesh.h" />
     <ClInclude Include="meshmodel.h" />
+    <ClInclude Include="meshmodelskeleton.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="shaderprogram.h" />
     <ClInclude Include="sphere.h" />
@@ -36,7 +38,9 @@
     <ClCompile Include="custom_camera.cpp" />
     <ClCompile Include="lodepng.cpp" />
     <ClCompile Include="main_file.cpp" />
+    <ClCompile Include="mesh.cpp" />
     <ClCompile Include="meshmodel.cpp" />
+    <ClCompile Include="meshmodelskeleton.cpp" />
     <ClCompile Include="model.cpp" />
     <ClCompile Include="shaderprogram.cpp" />
     <ClCompile Include="sphere.cpp" />

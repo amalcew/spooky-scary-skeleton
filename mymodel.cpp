@@ -1,7 +1,6 @@
-#include "meshmodel.h"
+#include "mymodel.h"
 
-// wczytuje pojedyncz¹ teksturê
-GLuint MeshModel::readTexture(const char* filename) {
+GLuint mymodel::readTexture(const char* filename) {
     GLuint tex;
     glActiveTexture(GL_TEXTURE0);
 
@@ -24,24 +23,11 @@ GLuint MeshModel::readTexture(const char* filename) {
     return tex;
 }
 
-// rysuje wszystkie meshe w modelu
-void MeshModel::drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam) {
-
-    int len = meshes.size();
-    glm::mat4 meshM;
-    for (int i = 0; i < len; ++i) {
-        meshes[i].drawMesh(V, P, M, cam);
-    }
-}
-
-void MeshModel::setShaderProgram(ShaderProgram* sp) {
-    this->sp = sp;
-}
-
-// ³aduje model z pliku + wczytuje tekstury
-void MeshModel::loadModel(std::string path) {
+mymodel::mymodel(std::string path)
+{
     using namespace std;
 
+    sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
     tex0 = readTexture("content/metal.png");
     tex1 = readTexture("content/sky.png");
 
@@ -54,11 +40,10 @@ void MeshModel::loadModel(std::string path) {
         }
 
         for (int i = 0; i < meshNum; i++) {
-            aiMesh* aimesh = scene->mMeshes[i];
-            Mesh mesh = Mesh(aimesh);
-            mesh.setTexture(tex0, tex1);
-            mesh.setShaderProgram(sp);
-            meshes.push_back(mesh);
+            if (i == 2) {
+                aiMesh* aimesh = scene->mMeshes[i];
+                meshes.push_back(mesh(aimesh));
+            }
         }
     }
     else {
@@ -66,13 +51,8 @@ void MeshModel::loadModel(std::string path) {
     }
 }
 
-void MeshModel::freeMemory() {
-    glDeleteTextures(1, &tex0);
-    glDeleteTextures(1, &tex1);
-    /*//usuniecie VBO z GPU
-    glDeleteBuffers(1, &bufVertex);
-    glDeleteBuffers(1, &bufNormal);
-    glDeleteBuffers(1, &bufTexCoord);
-    glDeleteBuffers(1, &bufIndex);*/
-    delete sp;
+void mymodel::drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam) {
+    for (mesh m : meshes) {
+        m.drawMesh(V, P, M, cam);
+    }
 }

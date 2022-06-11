@@ -13,6 +13,7 @@ class custom_camera
 private:
 	glm::vec3 lookingAt;
 	glm::vec3 up;
+	glm::vec3 offset;
 
 	double angleX;
 	double angleY;
@@ -32,10 +33,10 @@ public:
 	glm::vec3 position;
 
 	custom_camera();
-	custom_camera(glm::vec3);
+	custom_camera(glm::vec3, glm::vec3);
 
 	glm::mat4 getViewMatrix();
-	void set_position(glm::vec3);
+	void set_position(glm::vec3, glm::vec3);
 
 	void moveX(double);
 	void moveY(double);

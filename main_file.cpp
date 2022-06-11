@@ -37,6 +37,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "shaderprogram.h"
 
 #include "custom_camera.h"
+#include "meshmodelskeleton.h"
 
 struct key_status {
     bool arrow_left = false;
@@ -62,7 +63,8 @@ glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.001f, 200.0f)
 
 glm::mat4 M = glm::mat4(1.0f);
 
-MeshModel spooky;
+MeshModelSkeleton spooky;
+MeshModel spookyGeneric;
 
 
 //Odkomentuj, żeby rysować kostkę
@@ -160,7 +162,7 @@ void handle_controls(double time) {
 
 
 // =======================                                             OPENGL INIT/FREE  <===
-
+ShaderProgram* sp;
 //Procedura inicjująca
 void initOpenGLProgram(GLFWwindow* window) {
     //************Tutaj umieszczaj kod, który należy wykonać raz, na początku programu************
@@ -170,9 +172,29 @@ void initOpenGLProgram(GLFWwindow* window) {
     glfwSetKeyCallback(window, keyCallback);
     glfwSetScrollCallback(window, scroll_callback);
 
-    camera = custom_camera();
+    camera = custom_camera(
+        glm::vec3(0.0, 0.0, 3.0),
+        glm::vec3(0.0, 1.0, 0.0)
+    );
 
-    spooky.loadModel(std::string("content/skeleton-model.fbx"));
+
+    sp = new ShaderProgram("v_simplest.glsl", NULL, "f_simplest.glsl");
+
+    //spooky.loadModel(std::string("content/directions.obj"));
+    //spooky.loadModel(std::string("content/skeleton.fbx"));
+    //spooky.loadModel(std::string("content/skelly-rig.fbx"));
+
+    // UWAGA!!!!
+    // setShaderProgram MUSI BYĆ PRZED loadModel
+    // bo przypisany shader jest w loadModel przekazywany dalej do meshu
+    spookyGeneric.setShaderProgram(sp); 
+    spookyGeneric.loadModel(std::string("content/lowpolytest02-all.obj"));
+
+
+    spooky.setShaderProgram(sp);
+    spooky.loadModel(std::string("content/lowpolytest02-all.obj"));
+    //spooky.loadModel(std::string("content/SKELETON.fbx"));
+    //spooky.loadModel(std::string("content/skeleton-model.fbx"));
 }
 
 //Zwolnienie zasobów zajętych przez program
@@ -189,6 +211,9 @@ void drawScene(GLFWwindow* window) {
     V = camera.getViewMatrix(); //Wylicz macierz widoku
     //camera.debug();
     spooky.drawModel(V, P, M, camera.position);
+    spookyGeneric.drawModel(V, P, 
+        glm::translate(M, glm::vec3(1.0, 1.0, -1.0))
+       , camera.position); 
     glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
 
