@@ -65,6 +65,7 @@ glm::mat4 M = glm::mat4(1.0f);
 
 MeshModelSkeleton spooky;
 MeshModel spookyGeneric;
+MeshModel sceneFloor;
 
 
 //Odkomentuj, żeby rysować kostkę
@@ -190,6 +191,8 @@ void initOpenGLProgram(GLFWwindow* window) {
     spookyGeneric.setShaderProgram(sp); 
     spookyGeneric.loadModel(std::string("content/lowpolytest02-all.obj"));
 
+    sceneFloor.setShaderProgram(sp);
+    sceneFloor.loadModel(std::string("content/floor.obj"));
 
     spooky.setShaderProgram(sp);
     spooky.loadModel(std::string("content/lowpolytest02-all.obj"));
@@ -213,7 +216,8 @@ void drawScene(GLFWwindow* window) {
     spooky.drawModel(V, P, M, camera.position);
     spookyGeneric.drawModel(V, P, 
         glm::translate(M, glm::vec3(1.0, 1.0, -1.0))
-       , camera.position); 
+       , camera.position);
+    sceneFloor.drawModel(V, P, M, camera.position);
     glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
 
