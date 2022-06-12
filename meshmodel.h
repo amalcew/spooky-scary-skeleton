@@ -24,7 +24,7 @@ public:
     // MeshModel();
     //~MeshModel();
     GLuint readTexture(const char* filename);
-    void drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam);
+    void drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam, double time);
     void loadModel(std::string path);
     void setShaderProgram(ShaderProgram* sp);
     std::vector<Mesh> meshes;

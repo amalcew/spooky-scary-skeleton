@@ -188,16 +188,16 @@ void freeOpenGLProgram(GLFWwindow* window) {
 }
 
 //Procedura rysująca zawartość sceny
-void drawScene(GLFWwindow* window) {
+void drawScene(GLFWwindow* window, double time) {
     //************Tutaj umieszczaj kod rysujący obraz******************l
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     V = camera.getViewMatrix(); //Wylicz macierz widoku
     //camera.debug();
-    spooky.drawModel(V, P, M, camera.position);
+    spooky.drawModel(V, P, M, camera.position, time);
     spookyGeneric.drawModel(V, P, 
         glm::translate(M, glm::vec3(1.0, 1.0, -1.0))
-       , camera.position);
-    sceneFloor.drawModel(V, P, M, camera.position);
+       , camera.position, time);
+    sceneFloor.drawModel(V, P, M, camera.position, time);
     glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
 
@@ -235,11 +235,11 @@ int main(void)
     glfwSetTime(0); //Zeruj timer
     while (!glfwWindowShouldClose(window)) //Tak długo jak okno nie powinno zostać zamknięte
     {
-
-        handle_controls(glfwGetTime());
+        double time = glfwGetTime();
+        handle_controls(time);
 
         glfwSetTime(0); //Zeruj timer
-        drawScene(window); //Wykonaj procedurę rysującą
+        drawScene(window, time); //Wykonaj procedurę rysującą
         glfwPollEvents(); //Wykonaj procedury callback w zalezności od zdarzeń jakie zaszły.
     }
 

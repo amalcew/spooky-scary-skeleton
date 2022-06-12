@@ -25,12 +25,12 @@ GLuint MeshModel::readTexture(const char* filename) {
 }
 
 // rysuje wszystkie meshe w modelu
-void MeshModel::drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam) {
+void MeshModel::drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam, double time) {
 
     int len = meshes.size();
     glm::mat4 meshM;
     for (int i = 0; i < len; ++i) {
-        meshes[i].drawMesh(V, P, M, cam);
+        meshes[i].drawMesh(V, P, M, cam, time);
     }
 }
 
