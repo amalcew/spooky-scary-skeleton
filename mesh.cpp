@@ -43,7 +43,7 @@ void Mesh::setShaderProgram(ShaderProgram* sp)
 }
 
 // rysuje pojedynczy mesh
-void Mesh::drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam) {
+void Mesh::drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam, double time) {
     sp->use();//Aktywacja programu cieniuj¹cego
     //Przeslij parametry programu cieniuj¹cego do karty graficznej
     glUniformMatrix4fv(sp->u("P"), 1, false, glm::value_ptr(P));

@@ -53,7 +53,10 @@ struct key_status {
 
 float speed_x = 0;
 float speed_y = 0;
-float aspectRatio = 1;
+
+int window_x = 700;
+int window_y = 700;
+float aspectRatio = window_x / (float)window_y;
 
 glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 0.0f, -50.0f),
     glm::vec3(0.0f, 0.0f, 0.0f),
@@ -205,15 +208,15 @@ void freeOpenGLProgram(GLFWwindow* window) {
 }
 
 //Procedura rysująca zawartość sceny
-void drawScene(GLFWwindow* window) {
+void drawScene(GLFWwindow* window, double time) {
     //************Tutaj umieszczaj kod rysujący obraz******************l
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     V = camera.getViewMatrix(); //Wylicz macierz widoku
     //camera.debug();
-    spooky.drawModel(V, P, M, camera.position);
+    spooky.drawModel(V, P, M, camera.position, time);
     spookyGeneric.drawModel(V, P, 
         glm::translate(M, glm::vec3(1.0, 1.0, -1.0))
-       , camera.position); 
+       , camera.position, time); 
     glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
 
@@ -228,7 +231,7 @@ int main(void)
         exit(EXIT_FAILURE);
     }
 
-    window = glfwCreateWindow(500, 500, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
+    window = glfwCreateWindow(window_x, window_y, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
 
     if (!window) //Jeżeli okna nie udało się utworzyć, to zamknij program
     {
@@ -251,11 +254,11 @@ int main(void)
     glfwSetTime(0); //Zeruj timer
     while (!glfwWindowShouldClose(window)) //Tak długo jak okno nie powinno zostać zamknięte
     {
-
-        handle_controls(glfwGetTime());
+        double time = glfwGetTime();
+        handle_controls(time);
 
         glfwSetTime(0); //Zeruj timer
-        drawScene(window); //Wykonaj procedurę rysującą
+        drawScene(window, time); //Wykonaj procedurę rysującą
         glfwPollEvents(); //Wykonaj procedury callback w zalezności od zdarzeń jakie zaszły.
     }
 

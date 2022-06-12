@@ -23,7 +23,7 @@ public:
     //~MeshModel();
     void setTexture(GLuint tex0, GLuint tex1);
     void setShaderProgram(ShaderProgram* sp);
-    void drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam);
+    void drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam, double time);
 private:
     void freeMemory();
 
