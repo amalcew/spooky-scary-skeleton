@@ -73,6 +73,7 @@ void Mesh::drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam, double
         r = 1.0; g = 1.0; b = 0.0;
     }
     float shift[] = { r, g, b };
+    //float shift[] = { 1.0, 1.0,  1.0 };
     glUniform3fv(sp->u("shift"), 1, shift);
 
     glEnableVertexAttribArray(sp->a("vertex"));  //Wï¿½ï¿½cz przesyï¿½anie danych do atrybutu vertex
