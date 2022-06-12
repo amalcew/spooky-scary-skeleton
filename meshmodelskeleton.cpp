@@ -424,7 +424,7 @@ void MeshModelSkeleton::drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::ve
         meshes[i].drawMesh(V, P, Mt, cam, time);
     }
 
-    current_time += time * 22;
+    current_time += time * 20;
     current_time = fmodf(current_time, animation_length);
 
     //printf("Current time: %lf\n", current_time);

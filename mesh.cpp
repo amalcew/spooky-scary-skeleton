@@ -56,7 +56,7 @@ void Mesh::drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam, double
     glUniform3fv(sp->u("campos"), 1, campos);
 
 
-    globalTime += time;
+    globalTime += time * 2;
     int flag = (int) (globalTime) % 6;
     // printf("flag %d\n", flag);
     float r, g, b;

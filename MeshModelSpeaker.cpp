@@ -4,7 +4,7 @@ void MeshModelSpeaker::setupAnimation()
 {
     sequences = std::vector<keyframesequence>(meshes.size());
 
-    animation_length = 15;
+    animation_length = 10;
 
     keyframe kf;
     keyframesequence kfs;
@@ -13,15 +13,17 @@ void MeshModelSpeaker::setupAnimation()
 
     // ===================================                         TORS
     kfs.clear();                // wyczyœæ sekwencjê
-    kf.time = 0;                // ustaw czas klatki
-    kf.transform = M0;          // ustaw transformacjê klatki
-    kfs.push_back(kf);          // wstaw klatkê do sekwencji
 
 
-    kf.time = 7.5;               
+    kf.time = 0;               
     kf.transform = M0;       
     kf.transform = glm::translate(kf.transform, glm::vec3(0.0, 0.3, 0.0));
-    kfs.push_back(kf);          
+    kfs.push_back(kf);  
+
+    kf.time = 5;                // ustaw czas klatki
+    kf.transform = M0;          // ustaw transformacjê klatki
+    kfs.push_back(kf);          // wstaw klatkê do sekwencji
+        
 
     for(int i = 0; i < meshes.size(); ++i)
         sequences[i] = kfs;     // wstaw sekwencjê dla meshu
@@ -83,8 +85,8 @@ glm::mat4 MeshModelSpeaker::getTransformation(int index, double time) {
 
             float scale = 1.0;
             float mult = 0.3;
-            if (i == 0) scale += mult * tdif;
-            else scale += mult * (1.0 - tdif);
+            if (i == 0) scale += mult * (1.0 - tdif);
+            else scale += mult * tdif;
 
             return glm::scale(mat, glm::vec3(scale, scale, scale));
 
@@ -105,7 +107,7 @@ void MeshModelSpeaker::drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec
         meshes[i].drawMesh(V, P, Mt, cam, time);
     }
 
-    current_time += time * 22;
+    current_time += time * 20;
     current_time = fmodf(current_time, animation_length);
 
     //printf("Current time: %lf\n", current_time);
