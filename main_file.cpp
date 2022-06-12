@@ -54,8 +54,8 @@ struct key_status {
 float speed_x = 0;
 float speed_y = 0;
 
-int window_x = 700;
-int window_y = 700;
+int window_x = 2560;
+int window_y = 1440;
 float aspectRatio = window_x / (float) window_y;
 
 glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 0.0f, -50.0f),
@@ -174,13 +174,17 @@ void initOpenGLProgram(GLFWwindow* window) {
     spookyGeneric.loadModel(std::string("content/lowpolytest02-all.obj"));
 
     sceneFloor.setShaderProgram(sp);
+    sceneFloor.setTexture("content/disco.png");
     sceneFloor.loadModel(std::string("content/floor.obj"));
 
     spooky.setShaderProgram(sp);
+    spooky.setTexture("content/bone.png");
     spooky.loadModel(std::string("content/lowpolytest02-all.obj"));
     spooky2.setShaderProgram(sp);
+    spooky2.setTexture("content/bone.png");
     spooky2.loadModel(std::string("content/lowpolytest02-all.obj"));
     spooky3.setShaderProgram(sp);
+    spooky3.setTexture("content/bone.png");
     spooky3.loadModel(std::string("content/lowpolytest02-all.obj"));
 
     //spooky.loadModel(std::string("content/SKELETON.fbx"));
@@ -199,16 +203,16 @@ void drawScene(GLFWwindow* window, double time) {
     //************Tutaj umieszczaj kod rysujący obraz******************l
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     V = camera.getViewMatrix(); //Wylicz macierz widoku
-    camera.debug();
+    //camera.debug();
     //printf("Start of frame\n");
     spooky.drawModel(V, P, glm::translate(M, glm::vec3(0.0, 0.0, 1.0)), camera.position, time);
     spooky2.drawModel(V, P, glm::translate(M, glm::vec3(1.0, 0.0, -1.0)), camera.position, time);
     spooky3.drawModel(V, P, glm::translate(M, glm::vec3(-1.0, 0.0, -1.0)), camera.position, time);
 
     //printf("END of frame\n");
-    /*spookyGeneric.drawModel(V, P, 
+    /*spookyGeneric.drawModel(V, P,
         glm::translate(M, glm::vec3(1.0, 1.0, -1.0))
-       , camera.position, time);*/
+       , camera.position, time); */
     sceneFloor.drawModel(V, P, M, camera.position, time);
     glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }

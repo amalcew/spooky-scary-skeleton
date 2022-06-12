@@ -38,12 +38,19 @@ void MeshModel::setShaderProgram(ShaderProgram* sp) {
     this->sp = sp;
 }
 
+void MeshModel::setTexture(const char* path) {
+    GLuint tex = readTexture(path);
+    this->tex = tex;
+}
+
 // ³aduje model z pliku + wczytuje tekstury
 void MeshModel::loadModel(std::string path) {
     using namespace std;
 
-    tex0 = readTexture("content/metal.png");
-    tex1 = readTexture("content/sky.png");
+    /*tex0 = readTexture("content/bone.png");
+    tex1 = readTexture("content/disco.png");*/
+    tex0 = tex;
+    tex1 = tex;
 
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals);
