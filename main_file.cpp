@@ -194,9 +194,9 @@ void drawScene(GLFWwindow* window, double time) {
     V = camera.getViewMatrix(); //Wylicz macierz widoku
     //camera.debug();
     spooky.drawModel(V, P, M, camera.position, time);
-    spookyGeneric.drawModel(V, P, 
+    /*spookyGeneric.drawModel(V, P,
         glm::translate(M, glm::vec3(1.0, 1.0, -1.0))
-       , camera.position, time); 
+       , camera.position, time); */
     sceneFloor.drawModel(V, P, M, camera.position, time);
     glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }

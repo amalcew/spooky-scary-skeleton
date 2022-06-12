@@ -24,10 +24,12 @@ public:
     void setTexture(GLuint tex0, GLuint tex1);
     void setShaderProgram(ShaderProgram* sp);
     void drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam, double time);
+    int colorShift(double time);
 private:
     void freeMemory();
 
     int meshNum;
+    double globalTime;
     ShaderProgram* sp;
 
     GLuint tex0;
