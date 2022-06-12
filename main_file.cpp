@@ -54,9 +54,9 @@ struct key_status {
 float speed_x = 0;
 float speed_y = 0;
 
-int window_x = 700;
-int window_y = 700;
-float aspectRatio = window_x / (float)window_y;
+int window_x = 2560;
+int window_y = 1440;
+float aspectRatio = window_x / (float) window_y;
 
 glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 0.0f, -50.0f),
     glm::vec3(0.0f, 0.0f, 0.0f),
@@ -68,24 +68,7 @@ glm::mat4 M = glm::mat4(1.0f);
 
 MeshModelSkeleton spooky;
 MeshModel spookyGeneric;
-
-
-//Odkomentuj, żeby rysować kostkę
-//float* vertices = myCubeVertices;
-//float* normals = myCubeNormals;
-//float* texCoords = myCubeTexCoords;
-//float* colors = myCubeColors;
-//int vertexCount = myCubeVertexCount;
-
-
-//Odkomentuj, żeby rysować czajnik
-//float* vertices = myTeapotVertices;
-//float* normals = myTeapotVertexNormals;
-//float* texCoords = myTeapotTexCoords;
-//float* colors = myTeapotColors;
-//int vertexCount = myTeapotVertexCount;
-
-
+MeshModel sceneFloor;
 custom_camera camera;
 
 // =======================                                   CALLBACKI / OBSŁUGA INPUTU  <===
@@ -97,26 +80,21 @@ void error_callback(int error, const char* description) {
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (action == GLFW_PRESS) {
-        if (key == GLFW_KEY_LEFT) pressed_keys.arrow_left = true;
-        if (key == GLFW_KEY_RIGHT) pressed_keys.arrow_right = true;
-        if (key == GLFW_KEY_UP) pressed_keys.arrow_up = true;
-        if (key == GLFW_KEY_DOWN) pressed_keys.arrow_down = true;
-        if (key == GLFW_KEY_EQUAL ||
-            key == GLFW_KEY_KP_ADD) pressed_keys.plus = true;
-        if (key == GLFW_KEY_MINUS ||
-            key == GLFW_KEY_KP_SUBTRACT) pressed_keys.minus = true;
-        if (key == GLFW_KEY_RIGHT_SHIFT ||
-            key == GLFW_KEY_LEFT_SHIFT) pressed_keys.shift = true;
+        if (key == GLFW_KEY_LEFT || key == GLFW_KEY_A) pressed_keys.arrow_left = true;
+        if (key == GLFW_KEY_RIGHT || key == GLFW_KEY_D) pressed_keys.arrow_right = true;
+        if (key == GLFW_KEY_UP || key == GLFW_KEY_W) pressed_keys.arrow_up = true;
+        if (key == GLFW_KEY_DOWN || key == GLFW_KEY_S) pressed_keys.arrow_down = true;
+        if (key == GLFW_KEY_EQUAL || key == GLFW_KEY_KP_ADD || key == GLFW_KEY_E) pressed_keys.plus = true;
+        if (key == GLFW_KEY_MINUS || key == GLFW_KEY_KP_SUBTRACT || key == GLFW_KEY_Q) pressed_keys.minus = true;
+        if (key == GLFW_KEY_RIGHT_SHIFT || key == GLFW_KEY_LEFT_SHIFT) pressed_keys.shift = true;
     }
     if (action == GLFW_RELEASE) {
-        if (key == GLFW_KEY_LEFT) pressed_keys.arrow_left = false;
-        if (key == GLFW_KEY_RIGHT) pressed_keys.arrow_right = false;
-        if (key == GLFW_KEY_UP) pressed_keys.arrow_up = false;
-        if (key == GLFW_KEY_DOWN) pressed_keys.arrow_down = false;
-        if (key == GLFW_KEY_EQUAL ||
-            key == GLFW_KEY_KP_ADD) pressed_keys.plus = false;
-        if (key == GLFW_KEY_MINUS ||
-            key == GLFW_KEY_KP_SUBTRACT) pressed_keys.minus = false;
+        if (key == GLFW_KEY_LEFT || key == GLFW_KEY_A) pressed_keys.arrow_left = false;
+        if (key == GLFW_KEY_RIGHT || key == GLFW_KEY_D) pressed_keys.arrow_right = false;
+        if (key == GLFW_KEY_UP || key == GLFW_KEY_W) pressed_keys.arrow_up = false;
+        if (key == GLFW_KEY_DOWN || key == GLFW_KEY_S) pressed_keys.arrow_down = false;
+        if (key == GLFW_KEY_EQUAL || key == GLFW_KEY_KP_ADD || key == GLFW_KEY_E) pressed_keys.plus = false;
+        if (key == GLFW_KEY_MINUS || key == GLFW_KEY_KP_SUBTRACT || key == GLFW_KEY_Q) pressed_keys.minus = false;
         if (key == GLFW_KEY_RIGHT_SHIFT ||
             key == GLFW_KEY_LEFT_SHIFT) pressed_keys.shift = false;
     }
@@ -193,6 +171,8 @@ void initOpenGLProgram(GLFWwindow* window) {
     spookyGeneric.setShaderProgram(sp); 
     spookyGeneric.loadModel(std::string("content/lowpolytest02-all.obj"));
 
+    sceneFloor.setShaderProgram(sp);
+    sceneFloor.loadModel(std::string("content/floor.obj"));
 
     spooky.setShaderProgram(sp);
     spooky.loadModel(std::string("content/lowpolytest02-all.obj"));
@@ -216,7 +196,8 @@ void drawScene(GLFWwindow* window, double time) {
     spooky.drawModel(V, P, M, camera.position, time);
     spookyGeneric.drawModel(V, P, 
         glm::translate(M, glm::vec3(1.0, 1.0, -1.0))
-       , camera.position, time); 
+       , camera.position, time);
+    sceneFloor.drawModel(V, P, M, camera.position, time);
     glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
 
