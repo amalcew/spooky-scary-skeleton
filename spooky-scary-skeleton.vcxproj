@@ -25,6 +25,7 @@
     <ClInclude Include="mesh.h" />
     <ClInclude Include="meshmodel.h" />
     <ClInclude Include="meshmodelskeleton.h" />
+    <ClInclude Include="MeshModelSpeaker.h" />
     <ClInclude Include="shaderprogram.h" />
   </ItemGroup>
   <ItemGroup>
@@ -34,6 +35,7 @@
     <ClCompile Include="mesh.cpp" />
     <ClCompile Include="meshmodel.cpp" />
     <ClCompile Include="meshmodelskeleton.cpp" />
+    <ClCompile Include="MeshModelSpeaker.cpp" />
     <ClCompile Include="shaderprogram.cpp" />
   </ItemGroup>
   <ItemGroup>

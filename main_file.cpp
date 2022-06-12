@@ -38,6 +38,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 
 #include "custom_camera.h"
 #include "meshmodelskeleton.h"
+#include "MeshModelSpeaker.h"
 
 struct key_status {
     bool arrow_left = false;
@@ -54,8 +55,8 @@ struct key_status {
 float speed_x = 0;
 float speed_y = 0;
 
-int window_x = 2560;
-int window_y = 1440;
+int window_x = 700;
+int window_y = 700;
 float aspectRatio = window_x / (float) window_y;
 
 glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 0.0f, -50.0f),
@@ -69,7 +70,8 @@ glm::mat4 M = glm::mat4(1.0f);
 MeshModelSkeleton spooky;
 MeshModelSkeleton spooky2;
 MeshModelSkeleton spooky3;
-MeshModel spookyGeneric;
+MeshModelSpeaker speaker1;
+MeshModelSpeaker speaker2;
 MeshModel sceneFloor;
 custom_camera camera;
 
@@ -170,22 +172,27 @@ void initOpenGLProgram(GLFWwindow* window) {
     // UWAGA!!!!
     // setShaderProgram MUSI BYĆ PRZED loadModel
     // bo przypisany shader jest w loadModel przekazywany dalej do meshu
-    spookyGeneric.setShaderProgram(sp); 
-    spookyGeneric.loadModel(std::string("content/lowpolytest02-all.obj"));
 
     sceneFloor.setShaderProgram(sp);
     sceneFloor.setTexture("content/disco.png");
     sceneFloor.loadModel(std::string("content/floor.obj"));
 
     spooky.setShaderProgram(sp);
-    spooky.setTexture("content/bone.png");
-    spooky.loadModel(std::string("content/lowpolytest02-all.obj"));
+    spooky.setTexture("content/bone2.png");
+    spooky.loadModel(std::string("content/lowpolytest03-all.obj"));
     spooky2.setShaderProgram(sp);
-    spooky2.setTexture("content/bone.png");
-    spooky2.loadModel(std::string("content/lowpolytest02-all.obj"));
+    spooky2.setTexture("content/bone2.png");
+    spooky2.loadModel(std::string("content/lowpolytest03-all.obj"));
     spooky3.setShaderProgram(sp);
-    spooky3.setTexture("content/bone.png");
-    spooky3.loadModel(std::string("content/lowpolytest02-all.obj"));
+    spooky3.setTexture("content/bone2.png");
+    spooky3.loadModel(std::string("content/lowpolytest03-all.obj"));
+
+    speaker1.setShaderProgram(sp);
+    speaker1.setTexture("content/Speaker.png");
+    speaker1.loadModel(std::string("content/Speaker.obj"));
+    speaker2.setShaderProgram(sp);
+    speaker2.setTexture("content/Speaker.png");
+    speaker2.loadModel(std::string("content/Speaker.obj"));
 
     //spooky.loadModel(std::string("content/SKELETON.fbx"));
     //spooky.loadModel(std::string("content/skeleton-model.fbx"));
@@ -210,9 +217,8 @@ void drawScene(GLFWwindow* window, double time) {
     spooky3.drawModel(V, P, glm::translate(M, glm::vec3(-1.0, 0.0, -1.0)), camera.position, time);
 
     //printf("END of frame\n");
-    /*spookyGeneric.drawModel(V, P,
-        glm::translate(M, glm::vec3(1.0, 1.0, -1.0))
-       , camera.position, time); */
+    speaker1.drawModel(V, P, glm::translate(M, glm::vec3(2.5, 0.0, -2.5)) , camera.position, time); 
+    speaker2.drawModel(V, P, glm::translate(M, glm::vec3(-2.5, 0.0, -2.5)) , camera.position, time); 
     sceneFloor.drawModel(V, P, M, camera.position, time);
     glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }

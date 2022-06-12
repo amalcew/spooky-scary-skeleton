@@ -12,20 +12,26 @@ void custom_camera::set_position(glm::vec3 start, glm::vec3 offset) {
 	speedR = allspeed/2;
 	this->offset = offset;
 
-	minR = 1;
-	maxR = 10000000;
+	minR = 3.5;
+	maxR = 100;
 	minAngY = 0.1;
-	maxAngY = 90.0;
+	maxAngY = 85.0;
 
 	// wyliczanie k�t�w z pozycji
 	if (position.x == 0) {
 		if(position.z >= 0) angleX = 0.0;
 		else angleX = 180.0;
 	}
-	else angleX = atanf(position.z / position.x);
+	else angleX = glm::degrees(atanf(position.z / position.x));
+
+	if (angleX >= 360.0) angleX = 0.0;
+	else if (angleX < 0.0) angleX += 360.0;
 
 	if (position.y == 0) angleY = 90.0;
-	else angleY = atanf(position.x / position.y);
+	else angleY = abs(glm::degrees(atanf(position.x / position.y)));
+
+	if (angleY < minAngY) angleY = minAngY;
+	else if (angleY > maxAngY) angleY = maxAngY;
 
 	// obliczanie odleg�o�ci mi�dzy kamer� a punktem 
 	R = glm::distance(position, lookingAt);
@@ -33,7 +39,7 @@ void custom_camera::set_position(glm::vec3 start, glm::vec3 offset) {
 	if (R < minR) R = minR;
 	else if (R > maxR) R = maxR;
 
-	// compute_position();
+	compute_position();
 }
 
 custom_camera::custom_camera() {
@@ -61,7 +67,7 @@ void custom_camera::moveR(double time) {
 // obr�� si� po p�aszczy�nie poziomej
 void custom_camera::moveX(double time) {
 	angleX += time * speedX;
-	if (angleX >= 360.0) angleX = 0.0;
+	if (angleX >= 360.0) angleX -= 360.0;
 	else if (angleX < 0.0) angleX += 360.0;
 	compute_position();
 }
