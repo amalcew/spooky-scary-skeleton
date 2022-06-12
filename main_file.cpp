@@ -53,7 +53,10 @@ struct key_status {
 
 float speed_x = 0;
 float speed_y = 0;
-float aspectRatio = 1;
+
+int window_x = 2560;
+int window_y = 1440;
+float aspectRatio = window_x / (float) window_y;
 
 glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 0.0f, -50.0f),
     glm::vec3(0.0f, 0.0f, 0.0f),
@@ -66,24 +69,6 @@ glm::mat4 M = glm::mat4(1.0f);
 MeshModelSkeleton spooky;
 MeshModel spookyGeneric;
 MeshModel sceneFloor;
-
-
-//Odkomentuj, żeby rysować kostkę
-//float* vertices = myCubeVertices;
-//float* normals = myCubeNormals;
-//float* texCoords = myCubeTexCoords;
-//float* colors = myCubeColors;
-//int vertexCount = myCubeVertexCount;
-
-
-//Odkomentuj, żeby rysować czajnik
-//float* vertices = myTeapotVertices;
-//float* normals = myTeapotVertexNormals;
-//float* texCoords = myTeapotTexCoords;
-//float* colors = myTeapotColors;
-//int vertexCount = myTeapotVertexCount;
-
-
 custom_camera camera;
 
 // =======================                                   CALLBACKI / OBSŁUGA INPUTU  <===
@@ -232,7 +217,7 @@ int main(void)
         exit(EXIT_FAILURE);
     }
 
-    window = glfwCreateWindow(500, 500, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
+    window = glfwCreateWindow(window_x, window_y, "OpenGL", NULL, NULL);  //Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
 
     if (!window) //Jeżeli okna nie udało się utworzyć, to zamknij program
     {
