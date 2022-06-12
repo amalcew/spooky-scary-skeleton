@@ -1,3 +1,6 @@
 .idea/
-/.vs
-.vs/*
+.vs/
+Debug/
+content/unused
+
+main_file
