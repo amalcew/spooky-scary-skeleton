@@ -27,6 +27,7 @@ public:
     void drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam, double time);
     void loadModel(std::string path);
     void setShaderProgram(ShaderProgram* sp);
+    void setTexture(const char* path);
     std::vector<Mesh> meshes;
 protected:
     // void initFromScene(const aiScene* scene, std::string path)
@@ -37,7 +38,7 @@ protected:
     int meshNum;
 
     ShaderProgram* sp;
-
+    GLuint tex;
     GLuint tex0;
     GLuint tex1;
 

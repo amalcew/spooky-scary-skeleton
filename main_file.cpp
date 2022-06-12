@@ -172,9 +172,11 @@ void initOpenGLProgram(GLFWwindow* window) {
     spookyGeneric.loadModel(std::string("content/lowpolytest02-all.obj"));
 
     sceneFloor.setShaderProgram(sp);
+    sceneFloor.setTexture("content/disco.png");
     sceneFloor.loadModel(std::string("content/floor.obj"));
 
     spooky.setShaderProgram(sp);
+    spooky.setTexture("content/bone.png");
     spooky.loadModel(std::string("content/lowpolytest02-all.obj"));
     //spooky.loadModel(std::string("content/SKELETON.fbx"));
     //spooky.loadModel(std::string("content/skeleton-model.fbx"));

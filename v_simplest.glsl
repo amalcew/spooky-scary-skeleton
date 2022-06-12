@@ -23,7 +23,7 @@ out vec2 iTexCoord0;
 out vec2 iTexCoord1;
 
 void main(void) {
-    vec4 lp = vec4(0,5,5,1); //wektor światła stałego w przestrzeni świata
+    vec4 lp = vec4(5,3,5,1); //wektor światła stałego w przestrzeni świata
     vec4 lpCam = vec4(campos.xyz, 1); //wektor światła za kamerą w przestrzeń świata
     l1 = normalize(V * lp - V*M*vertex); //wektor do światła w przestrzeni oka
     l2 = normalize(V * lpCam - V*M*vertex);
