@@ -44,8 +44,10 @@ void Mesh::setShaderProgram(ShaderProgram* sp)
 
 // rysuje pojedynczy mesh
 void Mesh::drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam, double time) {
-    sp->use();//Aktywacja programu cieniuj�cego
-    //Przeslij parametry programu cieniuj�cego do karty graficznej
+
+    sp->use();//Aktywacja programu cieniuj¹cego
+    //Przeslij parametry programu cieniuj¹cego do karty graficznej
+  
     glUniformMatrix4fv(sp->u("P"), 1, false, glm::value_ptr(P));
     glUniformMatrix4fv(sp->u("V"), 1, false, glm::value_ptr(V));
     glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
@@ -73,14 +75,14 @@ void Mesh::drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam, double
     float shift[] = { r, g, b };
     glUniform3fv(sp->u("shift"), 1, shift);
 
-    glEnableVertexAttribArray(sp->a("vertex"));  //W��cz przesy�anie danych do atrybutu vertex
-    glVertexAttribPointer(sp->a("vertex"), 4, GL_FLOAT, false, 0, verts.data()); //Wska� tablic� z danymi dla atrybutu vertex
+    glEnableVertexAttribArray(sp->a("vertex"));  //Wï¿½ï¿½cz przesyï¿½anie danych do atrybutu vertex
+    glVertexAttribPointer(sp->a("vertex"), 4, GL_FLOAT, false, 0, verts.data()); //Wskaï¿½ tablicï¿½ z danymi dla atrybutu vertex
 
-    glEnableVertexAttribArray(sp->a("normal"));  //W��cz przesy�anie danych do atrybutu normal
-    glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, norms.data()); //Wska� tablic� z danymi dla atrybutu normal
+    glEnableVertexAttribArray(sp->a("normal"));  //Wï¿½ï¿½cz przesyï¿½anie danych do atrybutu normal
+    glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, norms.data()); //Wskaï¿½ tablicï¿½ z danymi dla atrybutu normal
 
-    glEnableVertexAttribArray(sp->a("texCoord0"));  //W��cz przesy�anie danych do atrybutu texCoord
-    glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, texCoords.data()); //Wska� tablic� z danymi dla atrybutu texCoord
+    glEnableVertexAttribArray(sp->a("texCoord0"));  //Wï¿½ï¿½cz przesyï¿½anie danych do atrybutu texCoord
+    glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, texCoords.data()); //Wskaï¿½ tablicï¿½ z danymi dla atrybutu texCoord
 
     glUniform1i(sp->u("textureMap0"), 0);
     glActiveTexture(GL_TEXTURE0);
@@ -92,10 +94,10 @@ void Mesh::drawMesh(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam, double
 
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, indices.data());
 
-    glDisableVertexAttribArray(sp->a("vertex"));     //Wy��cz przesy�anie danych do atrybutu vertex
-    glDisableVertexAttribArray(sp->a("color"));      //Wy��cz przesy�anie danych do atrybutu color
-    glDisableVertexAttribArray(sp->a("normal"));     //Wy��cz przesy�anie danych do atrybutu normal
-    glDisableVertexAttribArray(sp->a("texCoord0"));  //Wy��cz przesy�anie danych do atrybutu texCoord0
+    glDisableVertexAttribArray(sp->a("vertex"));     //Wyï¿½ï¿½cz przesyï¿½anie danych do atrybutu vertex
+    glDisableVertexAttribArray(sp->a("color"));      //Wyï¿½ï¿½cz przesyï¿½anie danych do atrybutu color
+    glDisableVertexAttribArray(sp->a("normal"));     //Wyï¿½ï¿½cz przesyï¿½anie danych do atrybutu normal
+    glDisableVertexAttribArray(sp->a("texCoord0"));  //Wyï¿½ï¿½cz przesyï¿½anie danych do atrybutu texCoord0
     
 }
 

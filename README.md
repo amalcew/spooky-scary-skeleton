@@ -5,4 +5,4 @@
 2. (x) Framework animacji @amalcew @darthpiotr
 3. (x) Hardcodowanie animacji? @darthpiotr
 4. (x) Wielopunktowe oświetlenie @amalcew
-5. (x) Dodać scenę @amalcew
+5. (/) Dodać scenę @amalcew
