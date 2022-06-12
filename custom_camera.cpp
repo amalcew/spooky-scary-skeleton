@@ -15,9 +15,9 @@ void custom_camera::set_position(glm::vec3 start, glm::vec3 offset) {
 	minR = 1;
 	maxR = 10000000;
 	minAngY = 0.1;
-	maxAngY = 179.9;
+	maxAngY = 90.0;
 
-	// wyliczanie k¹tów z pozycji
+	// wyliczanie kï¿½tï¿½w z pozycji
 	if (position.x == 0) {
 		if(position.z >= 0) angleX = 0.0;
 		else angleX = 180.0;
@@ -27,7 +27,7 @@ void custom_camera::set_position(glm::vec3 start, glm::vec3 offset) {
 	if (position.y == 0) angleY = 90.0;
 	else angleY = atanf(position.x / position.y);
 
-	// obliczanie odleg³oœci miêdzy kamer¹ a punktem 
+	// obliczanie odlegï¿½oï¿½ci miï¿½dzy kamerï¿½ a punktem 
 	R = glm::distance(position, lookingAt);
 
 	if (R < minR) R = minR;
@@ -44,13 +44,13 @@ custom_camera::custom_camera(glm::vec3 start, glm::vec3 offset) {
 	set_position(start, offset);
 }
 
-// zwróæ macierz V
+// zwrï¿½ï¿½ macierz V
 glm::mat4 custom_camera::getViewMatrix()
 {
 	return glm::lookAt(position + offset, lookingAt + offset, up);
 }
 
-// zmieñ odleg³oœæ od punktu który patrzysz
+// zmieï¿½ odlegï¿½oï¿½ï¿½ od punktu ktï¿½ry patrzysz
 void custom_camera::moveR(double time) {
 	R += time * speedR;
 	if (R < minR) R = minR;
@@ -58,7 +58,7 @@ void custom_camera::moveR(double time) {
 	compute_position();
 }
 
-// obróæ siê po p³aszczyŸnie poziomej
+// obrï¿½ï¿½ siï¿½ po pï¿½aszczyï¿½nie poziomej
 void custom_camera::moveX(double time) {
 	angleX += time * speedX;
 	if (angleX >= 360.0) angleX = 0.0;
@@ -66,7 +66,7 @@ void custom_camera::moveX(double time) {
 	compute_position();
 }
 
-// obróæ siê góra/dó³
+// obrï¿½ï¿½ siï¿½ gï¿½ra/dï¿½
 void custom_camera::moveY(double time) {
 	angleY += time * speedY;
 	if (angleY < minAngY) angleY = minAngY;
@@ -74,7 +74,7 @@ void custom_camera::moveY(double time) {
 	compute_position();
 }
 
-// oblicz pozycjê po zmianie obrotu
+// oblicz pozycjï¿½ po zmianie obrotu
 void custom_camera::compute_position() {
 	double angleXRad = glm::radians(angleX);
 	double angleYRad = glm::radians(angleY);

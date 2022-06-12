@@ -34,7 +34,7 @@ void main(void) {
 	float nl2 = clamp(dot(mn, ml2), 0, 1);
 
 	float rv = pow(clamp(dot(mr2, mv), 0, 1), 50);
-	vec3 col = vec3(0.1, 0.9, 0.1);
-	pixelColor= vec4(col * nl1, kd.a) * 0.5 + vec4(kd.rgb * nl2, kd.a) + vec4(ks.rgb*rv, 0);
+	vec3 col = vec3(1, 1, 1);
+	pixelColor= vec4(col * nl1, kd.a) * 0.3 + vec4(kd.rgb * nl2, kd.a) + vec4(ks.rgb*rv, 0);
 	//pixelColor = kd;
 }
