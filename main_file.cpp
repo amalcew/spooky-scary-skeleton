@@ -67,6 +67,8 @@ glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.001f, 200.0f)
 glm::mat4 M = glm::mat4(1.0f);
 
 MeshModelSkeleton spooky;
+MeshModelSkeleton spooky2;
+MeshModelSkeleton spooky3;
 MeshModel spookyGeneric;
 MeshModel sceneFloor;
 custom_camera camera;
@@ -154,7 +156,7 @@ void initOpenGLProgram(GLFWwindow* window) {
     glfwSetScrollCallback(window, scroll_callback);
 
     camera = custom_camera(
-        glm::vec3(0.0, 0.0, 3.0),
+        glm::vec3(-6.0, 2.0, 6.0),
         glm::vec3(0.0, 1.0, 0.0)
     );
 
@@ -178,6 +180,13 @@ void initOpenGLProgram(GLFWwindow* window) {
     spooky.setShaderProgram(sp);
     spooky.setTexture("content/bone.png");
     spooky.loadModel(std::string("content/lowpolytest02-all.obj"));
+    spooky2.setShaderProgram(sp);
+    spooky2.setTexture("content/bone.png");
+    spooky2.loadModel(std::string("content/lowpolytest02-all.obj"));
+    spooky3.setShaderProgram(sp);
+    spooky3.setTexture("content/bone.png");
+    spooky3.loadModel(std::string("content/lowpolytest02-all.obj"));
+
     //spooky.loadModel(std::string("content/SKELETON.fbx"));
     //spooky.loadModel(std::string("content/skeleton-model.fbx"));
 }
@@ -195,11 +204,15 @@ void drawScene(GLFWwindow* window, double time) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     V = camera.getViewMatrix(); //Wylicz macierz widoku
     //camera.debug();
-    spooky.drawModel(V, P, M, camera.position, time);
+    //printf("Start of frame\n");
+    spooky.drawModel(V, P, glm::translate(M, glm::vec3(0.0, 0.0, 1.0)), camera.position, time);
+    spooky2.drawModel(V, P, glm::translate(M, glm::vec3(1.0, 0.0, -1.0)), camera.position, time);
+    spooky3.drawModel(V, P, glm::translate(M, glm::vec3(-1.0, 0.0, -1.0)), camera.position, time);
+
+    //printf("END of frame\n");
     /*spookyGeneric.drawModel(V, P,
         glm::translate(M, glm::vec3(1.0, 1.0, -1.0))
        , camera.position, time); */
-
     sceneFloor.drawModel(V, P, M, camera.position, time);
     glfwSwapBuffers(window); //Przerzuć tylny bufor na przedni
 }
