@@ -57,8 +57,8 @@ struct key_status {
 float speed_x = 0;
 float speed_y = 0;
 
-int window_x = 700;
-int window_y = 700;
+int window_x = 2560;
+int window_y = 1440;
 float aspectRatio = window_x / (float) window_y;
 
 glm::mat4 V = glm::lookAt(glm::vec3(0.0f, 0.0f, -50.0f),
