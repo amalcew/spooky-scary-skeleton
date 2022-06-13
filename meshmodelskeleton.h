@@ -5,7 +5,7 @@
 // rozszerzenie klasy MeshModel specjalnie pod szkieleta
 class MeshModelSkeleton : public MeshModel
 {
-private:
+protected:
     const int TORSO = 0;
     const int ARM_R = 1;
     const int ARM_L = 2;
@@ -28,7 +28,7 @@ private:
     double current_time = 0;
     double animation_length;
 
-    void setupAnimation();
+    virtual void setupAnimation();
     glm::mat4 getTransformation(int index, double time);
     glm::mat4 interpolate(glm::mat4& m1, glm::mat4& m2, float tdif);
 public:

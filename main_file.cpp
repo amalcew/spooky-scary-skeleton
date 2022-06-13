@@ -39,6 +39,8 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "custom_camera.h"
 #include "meshmodelskeleton.h"
 #include "MeshModelSpeaker.h"
+#include "MeshModelSkeletonHeadbang.h"
+#include "MeshModelSkeletonSpin.h"
 
 struct key_status {
     bool arrow_left = false;
@@ -68,8 +70,8 @@ glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, aspectRatio, 0.001f, 200.0f)
 glm::mat4 M = glm::mat4(1.0f);
 
 MeshModelSkeleton spooky;
-MeshModelSkeleton spooky2;
-MeshModelSkeleton spooky3;
+MeshModelSkeletonHeadbang spooky2;
+MeshModelSkeletonSpin spooky3;
 MeshModelSpeaker speaker1;
 MeshModelSpeaker speaker2;
 MeshModel sceneFloor;
@@ -212,9 +214,9 @@ void drawScene(GLFWwindow* window, double time) {
     V = camera.getViewMatrix(); //Wylicz macierz widoku
     //camera.debug();
     //printf("Start of frame\n");
-    spooky.drawModel(V, P, glm::translate(M, glm::vec3(0.0, 0.0, 1.0)), camera.position, time);
-    spooky2.drawModel(V, P, glm::translate(M, glm::vec3(1.0, 0.0, -1.0)), camera.position, time);
-    spooky3.drawModel(V, P, glm::translate(M, glm::vec3(-1.0, 0.0, -1.0)), camera.position, time);
+    spooky.drawModel(V, P, glm::translate(M, glm::vec3(0.0, 0.0, 2.0)), camera.position, time);
+    spooky2.drawModel(V, P, glm::translate(M, glm::vec3(1.5, 0.0, 0.0)), camera.position, time);
+    spooky3.drawModel(V, P, glm::translate(M, glm::vec3(-1.5, 0.0, 0.0)), camera.position, time);
 
     //printf("END of frame\n");
     speaker1.drawModel(V, P, glm::translate(M, glm::vec3(2.5, 0.0, -2.5)) , camera.position, time); 
