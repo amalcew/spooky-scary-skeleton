@@ -2,18 +2,10 @@
 
 #include "meshmodel.h"
 
-// rozszerzenie klasy MeshModel specjalnie pod szkieleta
-class MeshModelSkeleton : public MeshModel
+class MeshModelSpeaker :
+    public MeshModel
 {
-protected:
-    const int TORSO = 0;
-    const int ARM_R = 1;
-    const int ARM_L = 2;
-    const int LEG_R = 3;
-    const int LEG_L = 4;
-    const int HEAD  = 5;
-
-
+private:
     // przesuniêcia meshów
     std::vector<glm::vec3> translations;
 
@@ -28,13 +20,12 @@ protected:
     double current_time = 0;
     double animation_length;
 
-    virtual void setupAnimation();
+    void setupAnimation();
     glm::mat4 getTransformation(int index, double time);
     glm::mat4 interpolate(glm::mat4& m1, glm::mat4& m2, float tdif);
 public:
 
     virtual void loadModel(std::string path);
     virtual void drawModel(glm::mat4 V, glm::mat4 P, glm::mat4 M, glm::vec3 cam, double time);
-
 };
 
